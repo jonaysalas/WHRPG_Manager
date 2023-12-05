@@ -5,6 +5,11 @@ from Libraries.Logger import writeLog, writeLogErr
 class Dice():
 
     def __init__(self, min, max):
+        '''
+        Init of the Dice Class
+        :param min: Min possible value of the dice.
+        :param max: Max possible value of the dice
+        '''
         try:
             self._minValue = min
             self._maxValue = max
@@ -13,6 +18,13 @@ class Dice():
             writeLogErr("Error creating dice ({}, {}).\n{}".format(min, max,e))
 
     def Roll(self, explode=False, rrtH = False, rrtL = False):
+        '''
+        Simulates a roll of the dice
+        :param explode: If True, another dice will be roll every time the max value of the dice is rolled
+        :param rrtH: If True, an additional dice will be roll and the highest will be chosen
+        :param rrtL: If True, an additional dice will be roll and the lowest will be chosen
+        :return: An int value of the total result of the roll(s)
+        '''
         res = randint(self._minValue, self._maxValue)
 
         if explode:
@@ -48,6 +60,9 @@ class Dice():
 class DiceRoller():
 
     def __init__(self):
+        '''
+        Init of the class used to simulate dice rolls
+        '''
         try:
             self._d10 = Dice(1,10)
             self._d5 = Dice(1, 5)
@@ -57,6 +72,11 @@ class DiceRoller():
             writeLogErr("Error loading DiceRoller Class.\n{}".format(e))
 
     def GetDice(self, size=100):
+        '''
+        Function that returns the Dice object of the size specified
+        :param size: The size of the dice you want to get. Possible values: 5, 10 & 100
+        :return: returns the Dice object of the size selected or None if the dice selected is not a possible value
+        '''
         dice = None
         if size == '10':
             dice = self._d10
@@ -68,7 +88,19 @@ class DiceRoller():
         return dice
 
     def MakeARoll(self, format="", explode = False, rrtH = False, rrtL = False):
+        '''
+        Given a "roll formula", simulates a roll and returns the total result of the roll
+        The roll formula can contains fixed modifiers like +1 or -3 and rolls like {1d10} that must
+        be between keys {}. The number before the 'd' indicates the number of dices and the number
+        after the 'd' indicates the size of the dice.
+        Example roll formula: {1d10} -3
 
+        :param format: An string with the formar of the roll
+        :param explode: If True, another dice will be roll every time the max value of the dice is rolled
+        :param rrtH: If True, an additional dice will be roll and the highest will be chosen
+        :param rrtL: If True, an additional dice will be roll and the lowest will be chosen
+        :return: An int value of the result of the roll
+        '''
         format.lower()
         if format == "":
             return None
